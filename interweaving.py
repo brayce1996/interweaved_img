@@ -9,8 +9,8 @@ Variables that you can tune:
     
     STEPS
 
-    HEAD_NO_SHIFT
-    TAIL_NO_SHIFT
+    HEAD_SHIFT_HIGH
+    TAIL_SHIFT_HIGH
 
     the calling structure(at bottom)
 '''
@@ -24,8 +24,8 @@ def insert_origin_img(src_path, num):
 
 def generate_shift_arr(h_size, w_size, pre_shift_high=[], pre_shift_wid=[]):
     # no shift area
-    HEAD_NO_SHIFT = h_size // 4
-    TAIL_NO_SHIFT = HEAD_NO_SHIFT + h_size // 2
+    HEAD_SHIFT_HIGH = h_size // 3
+    TAIL_SHIFT_HIGH = HEAD_SHIFT_HIGH + h_size // 3
 
     # shift pixel range, hight should be positive, and width could be positive or negative.
     SHIFT_HIGH_MAX = 25
@@ -57,17 +57,24 @@ def generate_shift_arr(h_size, w_size, pre_shift_high=[], pre_shift_wid=[]):
     else:
         shift_wid_arr = []
         sum_high = 0
+        shift_wid = 0
         for shift_high in shift_high_arr:
             sum_high += shift_high
 
-            if sum_high < HEAD_NO_SHIFT or sum_high > TAIL_NO_SHIFT:
-                shift_wid = 0
-            elif shift_wid > 0:
-                shift_wid = random.randint(-SHIFT_WID_MAX, -SHIFT_WID_MIN)
-            elif shift_wid < 0:
-                shift_wid = random.randint(SHIFT_WID_MIN, SHIFT_WID_MAX)
+            if sum_high < HEAD_SHIFT_HIGH or sum_high > TAIL_SHIFT_HIGH:
+                if shift_wid > 0:
+                    shift_wid = random.randint(-SHIFT_WID_MAX//5, -SHIFT_WID_MIN//5)
+                elif shift_wid < 0:
+                    shift_wid = random.randint(SHIFT_WID_MIN//5, SHIFT_WID_MAX//5)
+                else:
+                    shift_wid = random.randint(-SHIFT_WID_MAX//5, SHIFT_WID_MAX//5)
             else:
-                shift_wid = random.randint(-SHIFT_WID_MAX, SHIFT_WID_MAX)
+                if shift_wid > 0:
+                    shift_wid = random.randint(-SHIFT_WID_MAX, -SHIFT_WID_MIN)
+                elif shift_wid < 0:
+                    shift_wid = random.randint(SHIFT_WID_MIN, SHIFT_WID_MAX)
+                else:
+                    shift_wid = random.randint(-SHIFT_WID_MAX, SHIFT_WID_MAX)
             shift_wid_arr.append(shift_wid)
 
     print (shift_high_arr)
@@ -130,7 +137,8 @@ def single_animating(origin_img, shift_high_arr, shift_wid_arr):
 
 
 pic_num = 0 # the sequencial number of output pictures.
-ori_img_path = 'demo.png'
+ori_img_path = 'origin.png'
+ori_img_path2 = 'origin2.png'
 origin_img = Image.open(ori_img_path)
 os.system("rm -fr pic/*.png")
 
@@ -145,7 +153,7 @@ single_animating(origin_img, shift_high_arr, shift_wid_arr)
 shift_high_arr, shift_wid_arr = generate_shift_arr(origin_img.size[1], origin_img.size[0], shift_high_arr, shift_wid_arr)
 single_animating(origin_img, shift_high_arr, shift_wid_arr)
 
-insert_origin_img(ori_img_path, 5)
+insert_origin_img(ori_img_path2, 30)
 
 shift_high_arr, shift_wid_arr = generate_shift_arr(origin_img.size[1], origin_img.size[0], shift_high_arr)
 single_animating(origin_img, shift_high_arr, shift_wid_arr)
