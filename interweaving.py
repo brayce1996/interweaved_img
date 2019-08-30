@@ -137,8 +137,8 @@ def single_animating(origin_img, shift_high_arr, shift_wid_arr):
 
 
 pic_num = 0 # the sequencial number of output pictures.
-ori_img_path = 'origin.png'
-ori_img_path2 = 'origin2.png'
+ori_img_path = 'demo.png'
+ori_img_path2 = 'demo2.png'
 origin_img = Image.open(ori_img_path)
 os.system("rm -fr pic/*.png")
 
