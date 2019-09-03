@@ -80,7 +80,29 @@ def generate_shift_arr(h_size, w_size, pre_shift_high=[], pre_shift_wid=[]):
     print (shift_high_arr)
     print (shift_wid_arr)
     return shift_high_arr, shift_wid_arr
+'''
+The concept of shifting:
+suppose the following sequence of number is a row of pixels with value from 0~9
+and the '|' indicate the border of the image.
+|01234567890123456789|
 
+if I want to shift this row by 4 pixels to the right, the result would be:
+|    0123456789012345|6789
+
+the space at the left would become black if the that pixels are not assigned value,
+and the 6789 would not be displayed.
+
+Thus, the problem here is that which value should be used to fill the space.
+
+The solution here is scrach the left most pixels:
+|00112233456789012345|6789
+
+On the other hand, shift left by 4 pixels would be:
+0123|4567890123456789    |
+
+and the solution:
+0123|45678901234566778899|
+'''
 def interweaving(origin_img, output_name, shift_high_arr, shift_wid_arr):
     pixelMap = origin_img.load()
 
